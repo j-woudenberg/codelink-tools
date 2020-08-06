@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle codelink-tools",
+        "command": "codelink-tools:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "codelink-tools",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "codelink-tools:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
