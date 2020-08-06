@@ -1,5 +1,5 @@
 # codelink-tools package
 
-An Atom package for Codelink that includes a compiler, debugger, and solution explorer.
+An Atom package for CodeLink that includes a compiler, debugger, and solution explorer.
 
 ![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
