@@ -2,13 +2,13 @@
     "name": "codelink-tools",
     "main": "./lib/codelink-tools",
     "version": "0.0.0",
-    "description": "A short description of your package",
+    "description": "An Atom package for CodeLink that includes a compiler, debugger, and a solution explorer",
     "keywords": [
     ],
     "activationCommands": {
         "atom-workspace": "codelink-tools:toggle"
     },
-    "repository": "https://github.com/atom/codelink-tools",
+    "repository": "https://github.com/j-woudenberg/codelink-tools",
     "license": "MIT",
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
