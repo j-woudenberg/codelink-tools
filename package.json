@@ -7,6 +7,9 @@
     "activationCommands": {
         "atom-workspace": "codelink-tools:toggle"
     },
+    "activationHooks": [
+        "source.codelink:root-scope-used"
+    ],
     "repository": "https://github.com/j-woudenberg/codelink-tools",
     "license": "MIT",
     "engines": {

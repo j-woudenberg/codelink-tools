@@ -4,5 +4,25 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.codelink-tools {
+.codelink-tools {}
+
+.parseResultList {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+
+    .parseResult {
+        display: flex;
+        align-items: center;
+        padding: 0 .35rem;
+
+        .icon,
+        .resultText {
+            margin-right: 0.5rem;
+        }
+
+        .resultLocation {
+            margin-left: auto;
+        }
+    }
 }

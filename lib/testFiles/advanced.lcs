@@ -1,0 +1,173 @@
+using system;
+using system.memory;
+
+unsafe namespace test
+{
+  alias dataType int;
+  alias int int32;
+
+  public struct node {
+    public dataType data;
+    public ^node next;
+  }
+
+  public struct nodeList {
+    private ^node myFirst;
+    private ^node myLast;
+    private int myCount;
+
+    private ^node allocateNode(dataType data) {
+      ^node cur = system.memory.allocate(sizeof(node));
+      cur^.data = data;
+      return cur;
+    }
+
+    private void deallocateNode(^node ptr) {
+      system.memory.deallocate(ptr);
+    }
+
+    private ^node nodeAt(int index) {
+      if (index >= myCount) return null;
+      if (index < 0) return null;
+      ^node cur = myFirst;
+      while (index > 0) {
+        cur = cur^.next;
+        index -= 1;
+      }
+      return cur;
+    }
+
+    public void append(dataType data) {
+      ^node cur = allocateNode(data);
+      if (myCount < 1) {
+        myFirst = cur;
+        myLast = cur;
+      }
+      else {
+        myLast^.next = cur;
+        myLast = cur;
+      }
+      myCount += 1;
+    }
+
+    public void insert(int index, dataType data) {
+      if ((myCount < 1) || (index >= myCount)) {
+        append(data);
+        return;
+      }
+
+      ^node newNode = allocateNode(data);
+      if (index <= 0) {
+        newNode^.next = myFirst;
+        myFirst = newNode;
+      }
+      else {
+        ^node prev = nodeAt(index - 1);
+        ^node next = prev^.next;
+        prev^.next = newNode;
+        newNode^.next = next;
+      }
+
+      myCount += 1;
+    }
+
+    /// Remove an item at the specified index
+    public dataType remove(int index) {
+      if (index <= 0) {
+        return dequeue();
+      }
+      else if (index >= myCount) {
+        return pop();
+      }
+
+      ^node prev = nodeAt(index - 1);
+
+      ^node toRemove = prev^.next;
+      prev^.next = toRemove^.next;
+
+      result = toRemove^.data;
+      deallocateNode(toRemove);
+      myCount -= 1;
+    }
+
+    /// Add to the back of the list
+    public void push(dataType data) {
+      append(data);
+    }
+
+    /// Remove from the back of the list
+    public dataType pop() {
+      if (myCount < 1)
+        system.throw("Stack underflow");
+
+      ^node removed = myLast;
+      result = myLast^.data;
+
+      if (myCount == 1) {
+        myFirst = null;
+        myLast = null;
+      }
+      else if (myCount == 2) {
+        myLast = myFirst;
+        myFirst^.next = null;
+      }
+      else {
+        ^node prev = nodeAt(myCount - 2);
+        prev^.next = null;
+        myLast = prev;
+      }
+
+      deallocateNode(removed);
+      myCount -= 1;
+    }
+
+    // /// Add to the back of the list
+    public void enqueue(dataType data) {
+      append(data);
+    }
+
+    /// Remove from the front of the list
+    public dataType dequeue() {
+      if (myCount < 0) system.throw("Queue underflow");
+
+      ^node removed = myFirst;
+      result = removed^.data;
+
+      if (myCount == 1)
+      {
+        myFirst = null;
+        myLast = null;
+      }
+      else {
+        myFirst = myFirst^.next;
+      }
+
+      myCount -= 1;
+      deallocateNode(removed);
+    }
+  }
+
+  private nodeList myList;
+  private const int myCount = 50;
+
+  void start {
+
+    int j = 0;
+
+    while (j < 1000) {
+      for (int i = 0; i < myCount; i += 1) {
+        myList.enqueue(i + 1);
+      }
+
+      for (int i = 0; i < myCount; i += 1) {
+        myList.dequeue();
+      }
+
+      j += 1;
+    }
+
+
+    return j;
+  }
+
+}
