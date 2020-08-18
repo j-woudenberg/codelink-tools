@@ -1,7 +1,7 @@
 {
     "name": "codelink-tools",
     "main": "./lib/codelink-tools",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "An Atom package for CodeLink that includes a compiler, debugger, and a solution explorer",
     "keywords": [],
     "activationCommands": {
