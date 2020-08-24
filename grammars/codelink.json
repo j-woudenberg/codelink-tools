@@ -3712,7 +3712,7 @@
 			}
 		},
 		"type-builtin": {
-			"match": "\\b(bool|byte|char|decimal|double|float|int|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic)\\b",
+			"match": "\\b(bool|byte|char|decimal|double|float|int8|int16|int32|int64|long|object|sbyte|short|string|uint8|uint16|uint32|uint64|ulong|ushort|void|dynamic)\\b",
 			"captures": {
 				"1": {
 					"name": "keyword.type.codelink"

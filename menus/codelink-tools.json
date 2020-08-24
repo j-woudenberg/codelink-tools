@@ -1,26 +1,31 @@
 {
-  "context-menu": {
-    "atom-text-editor": [
-      {
-        "label": "Toggle codelink-tools",
-        "command": "codelink-tools:toggle"
-      }
-    ]
-  },
-  "menu": [
-    {
-      "label": "Packages",
-      "submenu": [
-        {
-          "label": "codelink-tools",
-          "submenu": [
+    "context-menu": {
+        "atom-text-editor": [
             {
-              "label": "Toggle",
-              "command": "codelink-tools:toggle"
+                "label": "Codelink Tools",
+                "submenu": [
+                    {
+                        "label": "Toggle Parser",
+                        "command": "codelink-tools:toggleParser"
+                    }
+                ]
             }
-          ]
+        ]
+    },
+    "menu": [
+        {
+            "label": "Packages",
+            "submenu": [
+                {
+                    "label": "Codelink Tools",
+                    "submenu": [
+                        {
+                            "label": "Toggle Parser",
+                            "command": "codelink-tools:toggleParser"
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

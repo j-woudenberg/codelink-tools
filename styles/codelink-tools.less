@@ -4,7 +4,7 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.codelink-tools {}
+.parser {}
 
 .parseResultList {
     width: 100%;
@@ -15,6 +15,11 @@
         display: flex;
         align-items: center;
         padding: 0 .35rem;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(42, 48, 56, 0.3);
+        }
 
         .icon,
         .resultText {
@@ -24,5 +29,24 @@
         .resultLocation {
             margin-left: auto;
         }
+    }
+}
+
+.highlights {
+    .region.parseMarker {
+        border-bottom: 1px;
+        border-bottom-style: dashed;
+    }
+
+    .region.parseMarker.parseError {
+        border-bottom-color: #dc3545;
+    }
+
+    .region.parseMarker.parseWarning {
+        border-bottom-color: #ffc107;
+    }
+
+    .region.parseMarker.parseInfo {
+        border-bottom-color: #17a2b8;
     }
 }

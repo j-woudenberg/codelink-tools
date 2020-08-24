@@ -17,6 +17,6 @@
     },
     "dependencies": {},
     "deserializers": {
-        "codelink-tools/CodelinkToolsView": "deserializeCodelinkToolsView"
+        "codelink-tools/Parser": "deserializeParser"
     }
 }
