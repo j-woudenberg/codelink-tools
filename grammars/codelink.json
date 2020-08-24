@@ -23,8 +23,12 @@
 		},
         {
             "name": "keyword.control.codelink",
-            "match": "\\b(#if|#elseif|#else|#endif|start)\\b"
+            "match": "\\b(#if|#elseif|#else|#endif)\\b"
         },
+		{
+			"name": "variable.parameter.function.codelink",
+			"match": "\\b(start)\\b"
+		},
         {
             "match": "\\b(?:(isDefined))\\b\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\b",
             "captures": {
