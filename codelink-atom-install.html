@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="LabLINK">
+    <head>
+        <meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no">
+        <title>Intalling Atom + CodeLINK</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <style type="text/css">
+            html, body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                font-family: 'Roboto', sans-serif;
+                background: rgba(240, 243, 244, 1);
+                background: -webkit-radial-gradient(circle, rgba(240, 243, 244, 1), rgba(225, 225, 225, 1));
+                background: -o-radial-gradient(circle, rgba(240, 243, 244, 1), rgba(225, 225, 225, 1));
+                background: -moz-linear-gradient(circle, rgba(240, 243, 244, 1), rgba(225, 225, 225, 1));
+                background: radial-gradient(circle, rgba(240, 243, 244, 1), rgba(225, 225, 225, 1));
+                color: #333;
+            }
+
+            *, ::after, ::before {
+                box-sizing: border-box;
+            }
+
+            h2 {
+                font-weight: 700;
+                margin-top: 3rem;
+            }
+
+            p {
+                font-weight: 400;
+            }
+
+            .header {
+                height: 50px;
+                min-height: 50px;
+                max-height: 50px;
+                color: #fff;
+                background-color: #004679;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header h2 {
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                padding: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            @media (min-width: 576px){
+                .container {
+                    max-width: 540px;
+                }
+            }
+
+            @media (min-width: 768px){
+                .container {
+                    max-width: 720px;
+                }
+            }
+
+            @media (min-width: 992px){
+                .container {
+                    max-width: 960px;
+                }
+            }
+
+            @media (min-width: 1200px){
+                .container {
+                    max-width: 1140px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h2>CodeLink Atom IDE</h2>
+        </div>
+        <div class="container">
+            <h2>Installing Atom</h2>
+            <p>
+                Head on over to <a href="https://atom.io">https://atom.io</a>, and download the appropriate version for your OS. This installer should be self-extracting, and pretty straightforward.
+            </p>
+            <h2>Installing the CodeLINK Package</h2>
+            <p>
+                Once Atom is installed, head up to the "File" menu, and select "Settings". This should open a new tab with various settings modules down the left-hand column. Select the "Install" module. In the top search box, type "codelink-tools" (without quotes), and press the "Install" button.
+            </p>
+            <h2>Using Atom/CodeLINK</h2>
+            <p>
+                With both of these items installed, Atom will be looking for files ending with ".lcs" (no quotes) to determine that this file should be handled by CodeLINK. Once a file is opened/edited, CodeLINK will run a background process (CodeLink_ServiceCmd.exe) which is going to be doing the actual parsing/compilation work.
+            </p>
+            <p>
+                <b>NOTE: The CodeLink package and CodeLink_ServiceCmd.exe require TCP and UDP access</b> to communicate between Atom and CodeLink_ServiceCmd.exe. You may need to allow network access to "CodeLink_ServiceCmd.exe" for the CodeLink package to function properly!
+            </p>
+            <p>
+                While editing a .lcs file, CodeLINK parsing results will be displayed directly in the editor window, as well as in the "CodeLink Parser" console, at the bottom of the screen.
+            </p>
+            <p>
+                In the long term, this package will also facilitate creating a 'solution', a complete package of multiple projects, and compiling the lot, as well as debugging. At the moment, we're pretty much just doing the parse job, but hey, it's a start!
+            </p>
+            <h2>Updating the CodeLINK Package</h2>
+            <p>
+                Ideally, Atom would inform you of an updated package, or you could simply open the "File" -> "Settings" tab, head to "Packages" and click "Update" on the "CodeLINK" package to check for updates manually. Unfortunately, we're still working out some bugs! As such, if you need to update your Atom package, you'll need to go into "Task Manager" -> "Details", and kill the "CodeLink_ServiceCmd.exe" manually before attempting an update. Sorry for the inconvenience!
+            </p>
+        </div>
+    </body>
+</html>
