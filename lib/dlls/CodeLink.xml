@@ -378,6 +378,12 @@
             <param name="PC"></param>
             <returns></returns>
         </member>
+        <member name="T:CodeLink.CompilerInternals.ExpressionContinue">
+            <summary>
+            This class strictly exists so that ExpressionGen can inform ObjectFileGen of the existance of a 'continue' expression.
+            ObjectFileGen actually replaces this with an <see cref="T:CodeLink.CompilerInternals.OItemStatementContinue"/>
+            </summary>
+        </member>
         <member name="M:CodeLink.CompilerInternals.GCObjectInstance.ReferenceRemove(CodeLink.CompilerInternals.ObjectReferenceType)">
             <summary>
             Returns 'true' if the object should be removed
@@ -661,6 +667,11 @@
             Identifies this as a <see cref="T:CodeLink.CompilerInternals.ExpressionBreak"/>
             </summary>
         </member>
+        <member name="F:CodeLink.CompilerInternals.ExpressionStyle.Continue">
+            <summary>
+            Identifies this as a <see cref="T:CodeLink.CompilerInternals.ExpressionContinue" />
+            </summary>
+        </member>
         <member name="F:CodeLink.CompilerInternals.ExpressionStyle.Call">
             <summary>
             Identifies this as a <see cref="T:CodeLink.CompilerInternals.ExpressionCall"/>
@@ -674,6 +685,11 @@
         <member name="F:CodeLink.CompilerInternals.ExpressionStyle.Array">
             <summary>
             Identifies this as a <see cref="T:CodeLink.CompilerInternals.ExpressionArray"/>
+            </summary>
+        </member>
+        <member name="F:CodeLink.CompilerInternals.ExpressionStyle.Anonymous">
+            <summary>
+            Identifies this as a <see cref="T:CodeLink.CompilerInternals.ExpressionAnonymous"/>
             </summary>
         </member>
         <member name="F:CodeLink.CompilerInternals.ExpressionStyle.BinaryOperator">
@@ -759,6 +775,12 @@
         <member name="F:CodeLink.CompilerInternals.ExpressionStyle.Null">
             <summary>
             Denotes a <see cref="T:CodeLink.CompilerInternals.ExpressionNull"/>
+            </summary>
+        </member>
+        <member name="T:CodeLink.CompilerInternals.ExpressionBreak">
+            <summary>
+            This class strictly exists so that ExpressionGen can inform ObjectFileGen of the existance of a 'break' expression.
+            ObjectFileGen actually replaces this with an <see cref="T:CodeLink.CompilerInternals.OItemStatementBreak"/>
             </summary>
         </member>
         <member name="M:CodeLink.CompilerInternals.ExpressionCall._EvaluateGetStaticInjectThis(CodeLink.CompilerInternals.CompileState)">
@@ -939,6 +961,12 @@
         <member name="M:CodeLink.CompilerInternals.ExpressionGenerator.AppendName(CodeLink.Token)">
             <summary>
             Appends a code 'name' which refers to a namespace, type, function, or variable
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ExpressionGenerator.AppendAnonymousName(CodeLink.Token)">
+            <summary>
+            Appends a 'name' which is going to create an anonymous function
             </summary>
             <param name="token"></param>
         </member>
@@ -1790,6 +1818,11 @@
             A 'break' statement, which can only be used inside of a loop
             </summary>
         </member>
+        <member name="F:CodeLink.CompilerInternals.OItemStatementStyle.Continue">
+            <summary>
+            A 'continue' statement, which can only be used inside of a loop
+            </summary>
+        </member>
         <member name="T:CodeLink.CompilerInternals.OItemStyle">
             <summary>
             Defines the major types of OItem that exist
@@ -1920,12 +1953,70 @@
             Contains the specific operator in a <see cref="!:Expressions.ExpressionOpUnary"/> or a <see cref="!:Expressions.ExpressionOpBinary"/>
             </summary>
         </member>
-        <member name="T:CodeLink.CompilerInternals.ParseLinkC">
+        <member name="F:CodeLink.CompilerInternals.OTypeObject_Generic.GenericParameterCount">
             <summary>
-            Parser for C-syntax language.
+            The real, actual, as completed, number of generic 'type parameters' that must be populated to compile this type
             </summary>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseTokens(CodeLink.ObjectFile@,System.String,System.Collections.Generic.List{CodeLink.Token})">
+        <member name="T:CodeLink.CompilerInternals.ParseLinkC">
+            <summary>
+            Parser for C-syntax language
+            </summary>
+        </member>
+        <member name="F:CodeLink.CompilerInternals.ParseLinkC.oGen">
+            <summary>
+            Global ObjectFile generator
+            </summary>
+        </member>
+        <member name="F:CodeLink.CompilerInternals.ParseLinkC.tokenList">
+            <summary>
+            List of tokens
+            </summary>
+        </member>
+        <member name="F:CodeLink.CompilerInternals.ParseLinkC.testReturnTypeString">
+            <summary>
+            Header constants used for batchTesting
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.#ctor">
+            <summary>
+            Instantiates an instance of the C-Parser
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStub(CodeLink.ObjectFile@,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Parses a stub
+            </summary>
+            <param name="objectFile">Parsing result if successful, null otherwise</param>
+            <param name="sourceID">Identification string of the stub</param>
+            <param name="sourceContent">Stub contents</param>
+            <param name="resultType">Stub expected result type</param>
+            <param name="namespaceWrap">Stub namespace</param>
+            <param name="usingList">Stub using list</param>
+            <returns>List of parsing results (will never be null)</returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseFile(CodeLink.ObjectFile@,System.String,System.String)">
+            <summary>
+            Parses a file
+            </summary>
+            <param name="objectFile">Parsing result if successful, null otherwise</param>
+            <param name="sourceID">Identification string of the file</param>
+            <param name="sourceContent">File contents</param>
+            <returns>List of parsing results (will never be null)</returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.GetLexer">
+            <summary>
+            Instantiates an instance of the lexer, this is done once for all parsing requests
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseTokens(System.Int32,System.Int32)">
+            <summary>
+            Call to parse tokens, specifying a start and end. Parses up to and including the end index.
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseAllTokens(CodeLink.ObjectFile@,System.String,System.Collections.Generic.List{CodeLink.Token})">
             <summary>
             Pass in a tokenlized list and returns an object file and/or result list.
             </summary>
@@ -1934,187 +2025,161 @@
             <param name="tokens">List of tokens to parse.</param>
             <returns>Returns a result list if we have one.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseKeyTokens">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseKeyTokens(System.Int32,System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses keywords.
             </summary>
             <returns>True if we have a match.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseUsing">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseUsing(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a using.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseNamespace">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseNamespace(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a namespace.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseClass">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseClass(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a class.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseFunction">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseFunction(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a function.
             </summary>
-            <returns>True if successful.</returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseAnonymousFunction(System.Int32@,CodeLink.CompilerInternals.ExpressionGenerator@,CodeLink.Token@)">
+            <summary>
+            Parses an anonymous function
+            </summary>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseParameters(CodeLink.Token)">
             <summary>
             Parses parameters.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStatement">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStatement(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a statement.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseGetterSetter">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseGetterSetter(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a getter/setter.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseEnum">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseEnum(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses an enum and its values.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseEnumValue(CodeLink.Token)">
             <summary>
             Parses enumerator values.
             </summary>
-            <param name="enumName">Enumerator name.</param>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStruct">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStruct(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a struct.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseSingleLineStatement(CodeLink.Token)">
             <summary>
             Parses a single line if, else, while, or do-while as a statement
             </summary>
-            <param name="source">Token of where we came from.</param>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseIf">
             <summary>
             Parses an if statement.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseElseIf">
             <summary>
             Parses an else-if.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseElse">
             <summary>
             Parses an else.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStart">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseStart(System.Int32,System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a start block.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseWhile">
             <summary>
             Parses a while loop.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseReturn">
             <summary>
             Parses a return.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseExit">
             <summary>
             Parses an exit.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseDelegate">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseDelegate(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a delegate.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseSetter">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseSetter(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a setter.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseGetter">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseGetter(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses a getter.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseTry">
             <summary>
             Parses a try block.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseCatch">
             <summary>
             Parses a catch block.
             </summary>
-            <returns>True if successful.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseAlias">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseAlias(System.Collections.Generic.List{CodeLink.CompilerInternals.SourceAttribute})">
             <summary>
             Parses an alias defenition.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC._ParseCompilerDirective(CodeLink.CompilerInternals.CompilerDirectiveStyle,System.Boolean)">
             <summary>
             Parses a compiler #if declaration
             </summary>
-            <returns></returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseCompilerDirectives">
             <summary>
             Parses compiler directives.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseFor">
             <summary>
             Parses a for loop.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseDoWhile">
             <summary>
             Parses a do-while loop.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseHint">
             <summary>
             Parses a comment.
             </summary>
-            <returns>True if successful.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC.ParseTestHeader(CodeLink.Token,System.String@,System.String@,System.Collections.Generic.List{CodeLink.InstructionSetInfo}@,System.Boolean@)">
             <summary>
@@ -2153,7 +2218,7 @@
             </summary>
             <param name="idx">Starting token index.</param>
             <param name="source">For special occassions we can pass in where we're calling this function from.</param>
-            <param name="matchUntil">Keep appending to the expression until the matchOn string is found.</param>
+            <param name="matchUntil">Keep appending to the expression until the matchUntil string is found.</param>
             <returns>Returns an expression.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC._GenerateExpression(CodeLink.CompilerInternals.ParseLinkC.ParseSource,System.String[])">
@@ -2162,7 +2227,24 @@
             NOTE: This function does not match opening-closing arguments.
             </summary>
             <param name="source">For special occassions we can pass in where we're calling this function from.</param>
-            <param name="matchUntil">Keep appending to the expression until the matchOn string is found.</param>
+            <param name="matchUntil">Keep appending to the expression until the matchUntil string is found.</param>
+            <returns>Returns an expression.</returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._GenerateExpression(System.Int32@,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.TokenStyle)">
+            <summary>
+            Generates an expression until a token style in the parameter passed in is found.
+            </summary>
+            <param name="idx">Starting token index.</param>
+            <param name="source">For special occassions we can pass in where we're calling this function from.</param>
+            <param name="match">Keep appending to the expression until the match tokenStyle is found.</param>
+            <returns>Returns an expression.</returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._GenerateExpression(CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.TokenStyle)">
+            <summary>
+            Generates an expression until a token style in the parameter passed in is found.
+            </summary>
+            <param name="source">For special occassions we can pass in where we're calling this function from.</param>
+            <param name="match">Keep appending to the expression until the match tokenStyle is found.</param>
             <returns>Returns an expression.</returns>
         </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC._SplitUnitToken(CodeLink.Token,CodeLink.Token@,CodeLink.Token@)">
@@ -2263,6 +2345,15 @@
             <param name="dir"></param>
             <param name="e"></param>
         </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._CatchError(System.Int32@,System.String[])">
+            <summary>
+            Loops through the tokenized list until one of the passed in string is found. This function is used to try to catch
+            the error and minimize the amount of invalid tokens that the parser will see.
+            </summary>
+            <param name="idx"></param>
+            <param name="find">Array of strings to find.</param>
+            <returns>Returns true if one of the given strings was found, false if we reached the end.</returns>
+        </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC._CatchError(System.String[])">
             <summary>
             Loops through the tokenized list until one of the passed in string is found. This function is used to try to catch
@@ -2271,18 +2362,20 @@
             <param name="find">Array of strings to find.</param>
             <returns>Returns true if one of the given strings was found, false if we reached the end.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC._AddToExpression(System.Int32@,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ExpressionGenerator@)">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._AddToExpression(System.Int32@,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.ExpressionGenInfo@,CodeLink.CompilerInternals.ExpressionGenerator@)">
             <summary>
             Adds a single token to the expression generator.
             </summary>
             <param name="idx">Index of token to add. This function will not move the index unless it appends multiple tokens to create an expression.</param>
             <param name="source">Where we are parsing this token from.</param>
+            <param name="info"></param>
             <param name="e">Expression generator to add the token to.</param>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC._AddSingleOperator(CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ExpressionGenerator@)">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._AddSingleOperator(System.Int32@,CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.ExpressionGenInfo@,CodeLink.CompilerInternals.ExpressionGenerator@)">
             <summary>
             Appends a single operator to the expression generator.
             </summary>
+            <param name="idx"></param>
             <param name="t">Token to append.</param>
             <param name="source">Where we are calling this function from.</param>
             <param name="e">Expression generator.</param>
@@ -2412,6 +2505,16 @@
             <param name="str">String to fix up.</param>
             <returns>Returns the fixed string.</returns>
         </member>
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._GetTestHeader(CodeLink.CompilerInternals.TokenList,System.String@,System.String@,System.Collections.Generic.List{CodeLink.InstructionSetInfo}@)">
+            <summary>
+            Returns the test header ouf of a script
+            </summary>
+            <param name="tokenList"></param>
+            <param name="testResultType"></param>
+            <param name="testResultValue"></param>
+            <param name="testISet"></param>
+            <returns></returns>
+        </member>
         <member name="M:CodeLink.CompilerInternals.ParseLinkC._CheckForWhitespace(CodeLink.Token,CodeLink.Token)">
             <summary>
             Given two tokens, checks if a whitespace exists between them.
@@ -2420,24 +2523,40 @@
             <param name="t2">Token 2.</param>
             <returns>True if whitespace exists between these tokens.</returns>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC._CheckForListSyntax(CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.ParseSource@)">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._CheckForListSyntax(System.Int32@,CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.ParseSource,CodeLink.CompilerInternals.ParseLinkC.ExpressionGenInfo@,CodeLink.CompilerInternals.ParseLinkC.ParseSource@)">
             <summary>
             Checks if we should be handling the greater-than and less-than symbols as a generic list start or arithmetic operations.
             </summary>
+            <param name="idx"></param>
             <param name="t"></param>
             <param name="source"></param>
         </member>
-        <member name="M:CodeLink.CompilerInternals.ParseLinkC._CreateExecutableStub(System.Collections.Generic.List{CodeLink.Token},System.String,System.String[],System.String,System.String)">
+        <member name="M:CodeLink.CompilerInternals.ParseLinkC._CreateExecutableStub(System.String,System.Collections.Generic.List{CodeLink.Token},System.String[],System.String,System.String)">
             <summary>
             Pass in a line of code and I will return an executable stub.
             </summary>
-            <param name="code">Code.</param>
+            <param name="sourceID"></param>
             <param name="namespace">Namespace the code belongs in.</param>
             <param name="using">Usings for the code.</param>
             <param name="returnType">Return type we want.</param>
             <param name="tokenList">Tokenized code.</param>
             <param name="hash"></param>
             <returns>False if successful.</returns>
+        </member>
+        <member name="T:CodeLink.CompilerInternals.ParseLinkC.ExpressionGenInfo">
+            <summary>
+            Contains info about parsing a list.
+            </summary>
+        </member>
+        <member name="T:CodeLink.CompilerInternals.ParseLinkC.TokenStyle">
+            <summary>
+            All of the different tokens we support.
+            </summary>
+        </member>
+        <member name="T:CodeLink.CompilerInternals.ParseLinkC.ParseSource">
+            <summary>
+            All of the different objects we currently support in this language .
+            </summary>
         </member>
         <member name="P:CodeLink.CompilerInternals.SourceAttribute.Attribute">
             <summary>
@@ -2449,14 +2568,13 @@
             Returns the <see cref="T:CodeLink.Token"/> (origin) of this <see cref="T:CodeLink.CompilerInternals.SourceAttribute"/>
             </summary>
         </member>
-        <member name="M:CodeLink.CompilerInternals.TokenList.#ctor(System.Collections.Generic.List{CodeLink.Token},System.Boolean,System.Boolean,CodeLink.CompilerInternals.ObjectFileGenerator)">
+        <member name="M:CodeLink.CompilerInternals.TokenList.#ctor(System.Collections.Generic.List{CodeLink.Token},System.Boolean,System.Boolean)">
             <summary>
             Creates an instance of TokenList; Helps navigate through the list of tokens.
             </summary>
             <param name="tokenList">List of tokens.</param>
             <param name="startOnComment">If true then the the index will be allowed to be pointing to a comment token.</param>
             <param name="skipComments">If true, allows class to return comment tokens. This does not include triple-line comments.</param>
-            <param name="oGen">If not null, then whenever a comment is seen, append this to the ObjectFileGenerator.</param>
             <param name="hintList"></param>
         </member>
         <member name="M:CodeLink.CompilerInternals.TokenList.Reset(System.Int32@,System.Boolean)">
@@ -2509,7 +2627,7 @@
             Peeks at the Current token.
             </summary>
         </member>
-        <member name="M:CodeLink.CompilerInternals.TokenList.GetTokenIndex(CodeLink.Token)">
+        <member name="M:CodeLink.CompilerInternals.TokenList.GetTokenIndex(CodeLink.Token,System.Int32)">
             <summary>
             Find the index given a token.
             </summary>
@@ -2555,6 +2673,12 @@
         <member name="M:CodeLink.CompilerInternals.TokenList.TokenIsStyle(CodeLink.CompilerInternals.ParseLinkC.TokenStyle[])">
             <summary>
              Returns true if the token is any of the following styles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.TokenList.TokenIsStyle(CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.TokenStyle[])">
+            <summary>
+            Returns true if the token is any of the following styles.
             </summary>
             <returns></returns>
         </member>
@@ -2794,6 +2918,26 @@
         <member name="M:CodeLink.CompilerInternals.TokenList.GetTokenStyleAndIncrement">
             <summary>
             Returns the current token style we're pointing to and increment index.
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.TokenList.ChangeTokenStyle(System.Int32,CodeLink.CompilerInternals.ParseLinkC.TokenStyle)">
+            <summary>
+            Changes the token style.
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.TokenList.ChangeTokenText(System.Int32,System.String)">
+            <summary>
+            Changes the token text.
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.TokenList.ChangeTokenStyle(CodeLink.Token,CodeLink.CompilerInternals.ParseLinkC.TokenStyle)">
+            <summary>
+            Changes the token style.
+            </summary>
+        </member>
+        <member name="M:CodeLink.CompilerInternals.TokenList.ChangeTokenText(CodeLink.Token,System.String)">
+            <summary>
+            Changes the token text.
             </summary>
         </member>
         <member name="M:CodeLink.CompilerInternals.MemorySpace.Allocate(System.Int32)">
@@ -3049,11 +3193,12 @@
             <param name="queueID"></param>
             <returns></returns>
         </member>
-        <member name="M:CodeLink.FileSystem.Directory.Create(System.String)">
+        <member name="M:CodeLink.FileSystem.Directory.Create(System.String,System.Boolean)">
             <summary>
             Ensures that the passed in "directoryPath" is valid and exists. Creates directory if required.
             </summary>
             <param name="directoryPath">The directory to validate</param>
+            <param name="cleanDirectory"></param>
             <returns>true if the directory exists / was created</returns>
         </member>
         <member name="M:CodeLink.FileSystem.Directory.CreateAsync(System.String,System.Int32)">
@@ -3064,19 +3209,29 @@
             <param name="queueID"></param>
             <returns></returns>
         </member>
-        <member name="M:CodeLink.FileSystem.Directory.Delete(System.String)">
+        <member name="M:CodeLink.FileSystem.Directory.Delete(System.String,System.Nullable{System.TimeSpan})">
             <summary>
             Attempts to delete a directory (and all of its contents). Returns 'true' if successful
             </summary>
             <param name="directoryPath"></param>
+            <param name="timeout"></param>
             <returns></returns>
         </member>
-        <member name="M:CodeLink.FileSystem.Directory.DeleteAsync(System.String,System.Int32)">
+        <member name="M:CodeLink.FileSystem.Directory.DeleteAsync(System.String,System.Int32,System.Nullable{System.TimeSpan})">
             <summary>
             Asynchronously attemps to delete a directory (and all of its contents)
             </summary>
             <param name="directoryPath"></param>
             <param name="queueID"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.FileSystem.Directory.GetSize(System.String,System.Boolean)">
+            <summary>
+            Attempts to read the size of all files within directory and returns the size
+            </summary>
+            <param name="directoryPath"></param>
+            <param name="includeSubDirectories"></param>
             <returns></returns>
         </member>
         <member name="M:CodeLink.FileSystem.Directory.EnumerateContents(System.String,System.String,System.Boolean)">
@@ -3175,6 +3330,13 @@
         <member name="M:CodeLink.FileSystem.File.Info(System.String)">
             <summary>
             Returns a .NET 'FileInfo' object, which is used to get 'Length', "LastWriteTime", etc.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.FileSystem.File.Create(System.String)">
+            <summary>
+            Attempts to create the file
             </summary>
             <param name="filePath"></param>
             <returns></returns>
@@ -3427,6 +3589,14 @@
             <para>If nothing is found, returns null</para>
             <returns></returns>
         </member>
+        <member name="M:CodeLink.FileSystem.SearchPaths.FindFiles(System.String,System.Boolean)">
+            <summary>
+            Returns a list of files that match the given 'searchQuery'. If given a fully qualified path to a single file (that exists) doesn't even attempt to search, just returns that file
+            </summary>
+            <param name="searchPattern"></param>
+            <param name="recurseDirectories"></param>
+            <returns></returns>
+        </member>
         <member name="M:CodeLink.FileSystem.SearchPaths.Save(System.String)">
             <summary>
             Saves this SearchPathList to a file
@@ -3673,6 +3843,20 @@
             Get/set the 'namespace' where <see cref="T:CodeLink.Instruction"/> objects are available to user-code. This can only be called during the <see cref="M:CodeLink.InstructionSet.Initialize"/> call
             </summary>
         </member>
+        <member name="M:CodeLink.InstructionSet.NameKey(System.String)">
+            <summary>
+            If the passed in string not a valid name, returns null. Otherwise, returns a 'toLower' version of the name
+            </summary>
+            <param name="iSetName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.InstructionSet.NameIsValid(System.String)">
+            <summary>
+            Returns 'true' if the given string could be a valid iSet name
+            </summary>
+            <param name="iSetName"></param>
+            <returns></returns>
+        </member>
         <member name="M:CodeLink.InstructionSet.TypeAdd(CodeLink.OTypeObject)">
             <summary>
             Adds an instance of <see cref="T:CodeLink.OTypeObject"/> to the <see cref="T:CodeLink.InstructionSet"/>.
@@ -3739,7 +3923,7 @@
             </example>
             <seealso cref="M:CodeLink.InstructionSet.InstructionsCreate"/>
             <seealso cref="M:CodeLink.InstructionSet.InstructionsLink"/>
-            <seealso cref="M:CodeLink.InstructionSet.Prepare"/>
+            <seealso cref="M:CodeLink.InstructionSet.Prepare(CodeLink.RunInstance)"/>
         </member>
         <member name="M:CodeLink.InstructionSet.InstructionAdd_LogicalNot(System.UInt16,System.Int32,CodeLink.InvokeInstruction,CodeLink.OType,System.Boolean)">
             <summary>
@@ -4362,10 +4546,19 @@
         </member>
         <member name="M:CodeLink.InstructionSet.ParamObject(System.String,CodeLink.OTypeObject)">
             <summary>
-            Creates an <see cref="T:CodeLink.IParam"/> for the String type
+            Creates an <see cref="T:CodeLink.IParam"/> for the an object type
             </summary>
             <param name="name"></param>
             <param name="oTypeSystemObject">The type of the parameter</param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.InstructionSet.ParamObject(System.String,CodeLink.OTypeObject,System.Boolean)">
+            <summary>
+            Creates an <see cref="T:CodeLink.IParam"/> for the an object type
+            </summary>
+            <param name="name"></param>
+            <param name="oTypeSystemObject"></param>
+            <param name="isOptional">If true, this parameter will have a default value of 'null'</param>
             <returns></returns>
         </member>
         <member name="M:CodeLink.InstructionSet.ReturnBoolean">
@@ -4489,7 +4682,7 @@
             <param name="staticCount">The static count of items in the array</param>
             <returns>An <see cref="T:CodeLink.IStackValue"/> for an Array of the <see cref="T:CodeLink.OType"/> with the count</returns>
         </member>
-        <member name="M:CodeLink.InstructionSet.ReturnObject(CodeLink.OTypeObject)">
+        <member name="M:CodeLink.InstructionSet.ReturnObject(CodeLink.OType)">
             <summary>
             Creates an "OTypeSystemObject" <see cref="T:CodeLink.IStackValue"/> to describe the return value of an <see cref="T:CodeLink.Instruction"/>
             </summary>
@@ -4572,6 +4765,11 @@
         <member name="P:CodeLink.InstructionSetInfo.MaxVersion">
             <summary>
             Returns the defined maximum version of the <see cref="T:CodeLink.InstructionSet"/>
+            </summary>
+        </member>
+        <member name="P:CodeLink.InstructionSetInfo.Tag">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:CodeLink.InstructionSetInfo.ToString">
@@ -4818,7 +5016,7 @@
         </member>
         <member name="F:CodeLink.TypeStyle.Delegate">
             <summary>
-            This type identifies a <see cref="T:CodeLink.CompilerInternals.OTypeDelegate"/> (function pointer and signature)
+            This type identifies a <see cref="T:CodeLink.OTypeDelegate"/> (function pointer and signature)
             </summary>
         </member>
         <member name="F:CodeLink.TypeStyle.Pointer">
@@ -4834,6 +5032,11 @@
         <member name="F:CodeLink.TypeStyle.Object">
             <summary>
             This type identifies a reference to a <see cref="T:CodeLink.OTypeObject"/>
+            </summary>
+        </member>
+        <member name="F:CodeLink.TypeStyle.Closure">
+            <summary>
+            This type identifies a very special <see cref="!:OTypeClosure"/>, which is only used internally when a closure is created
             </summary>
         </member>
         <member name="F:CodeLink.TypeStyle.StaticArray">
@@ -4961,6 +5164,11 @@
             Placeholder for a generic 'system array' type, unused by any user
             </summary>
         </member>
+        <member name="F:CodeLink.SystemTypeID.Closure">
+            <summary>
+            Placeholder for a 'closure', which is automatically generated to contain out of scope variables within an anonymous function
+            </summary>
+        </member>
         <member name="T:CodeLink.OTypeInfo">
             <summary>
             A representation of an <see cref="T:CodeLink.OType"/> to be serialized to or deserialized from an <see cref="T:CodeLink.OutputBinary"/>.
@@ -5011,7 +5219,7 @@
             <para>Will be empty in all other cases.</para>
             </summary>
         </member>
-        <member name="M:CodeLink.OTypeInfo.#ctor(CodeLink.OType)">
+        <member name="M:CodeLink.OTypeInfo.#ctor(CodeLink.RunInstance,CodeLink.OType)">
             <summary>
             Converts an <see cref="T:CodeLink.OType"/> into an <see cref="T:CodeLink.OTypeInfo"/> suitable for serialization into an <see cref="T:CodeLink.OutputBinary"/>.
             </summary>
@@ -5029,6 +5237,13 @@
             Adds a reference that lives in the stack (not very persistent)
             </summary>
             <param name="instance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.OTypeInfo.ReferenceDeleteFunction1(CodeLink.RunInstance)">
+            <summary>
+            Here, we don't need to worry about most 'systemObjects', only the ones that are 'hybrid' structures (user structures that contain object references)
+            </summary>
+            <param name="ri"></param>
             <returns></returns>
         </member>
         <member name="T:CodeLink.OTypeMemberInfo">
@@ -5057,7 +5272,7 @@
             </summary>
             <param name="variable"></param>
         </member>
-        <member name="M:CodeLink.OTypeMemberInfo.#ctor(System.String,System.Int32,System.Int32)">
+        <member name="M:CodeLink.OTypeMemberInfo.#ctor(System.String,System.Int32,System.Int32,System.Int32,System.Byte[])">
             <summary>
             Base constructor to use to build an <see cref="T:CodeLink.OTypeMemberInfo"/> from items deserialized from an <see cref="T:CodeLink.OutputBinary"/>.
             </summary>
@@ -5479,6 +5694,11 @@
             <para>If this is invoked while in a 'static' instruction, or while inside an instruction that is linked to a 'systemObject' type, this accessor will throw a 'NullReferenceException'</para>
             </summary>
         </member>
+        <member name="F:CodeLink.RunInstance.DataStackObjects">
+            <summary>
+            A dictionary of PC locations with associated 'refRemove' functions at those locations
+            </summary>
+        </member>
         <member name="M:CodeLink.RunInstance.CopyBytes(System.IntPtr,System.IntPtr,System.Int32)">
             <summary>
             Provides a simple method for copying data via IntPtr structures, preserving alignment
@@ -5583,6 +5803,12 @@
         <member name="M:CodeLink.RunInstance.PopUInt8">
             <summary>
             Pops 4 bytes off the stack, returning the least significant byte as a 1-byte unsigned integer
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CodeLink.RunInstance.PopUnit">
+            <summary>
+            Pops 4 bytes off the stack, returning the associated 'unit' object
             </summary>
             <returns></returns>
         </member>
@@ -6579,6 +6805,11 @@
             </summary>
             <param name="unitID">A valid <see cref="P:CodeLink.EngineeringUnits.Unit.UnitID"/></param>
             <returns>A valid <see cref="T:CodeLink.EngineeringUnits.Unit"/> object, or <code>null</code> if not found.</returns>
+        </member>
+        <member name="P:CodeLink.EngineeringUnits.Units.Unitless">
+            <summary>
+            Returns the 'unitless' unit
+            </summary>
         </member>
         <member name="M:CodeLink.EngineeringUnits.Units.Unit(System.String)">
             <summary>
